@@ -5,10 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +25,7 @@ public class TravelChallenge {
 
     @After
     public void tearDown() {
-//       driver.quit();
+    driver.quit();
     }
 
     @Test
@@ -45,6 +44,7 @@ public class TravelChallenge {
         driver.findElement(By.xpath("//span[text()='Flights   ']")).click();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.findElements(By.xpath("//ins")).get(1).click();
+//        driver.findElements(By.cssSelector(".iradio_square-grey")).get(1).click();
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//span[text()='Enter City Or Airport']"),1));
         driver.findElements(By.xpath("//span[text()='Enter City Or Airport']")).get(0).click();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -67,20 +67,15 @@ public class TravelChallenge {
         driver.findElements(By.xpath("//button[@type='submit']")).get(3).click();
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector(".btn.btn-primary.btn-sm.btn-block.bookbtn.br25"),0));
         driver.findElements(By.cssSelector(".btn.btn-primary.btn-sm.btn-block.bookbtn.br25")).get(0).click();
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollBy(0,1000)");
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("cookyGotItBtn"))).click();
+        Actions actions = new Actions(driver);
+        actions.moveToElement(driver.findElement(By.name("logged"))).build().perform();
         driver.findElement(By.xpath("//button[text()='CONFIRM THIS BOOKING']")).click();
         driver.manage().timeouts().pageLoadTimeout(100, TimeUnit.SECONDS);
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='btn btn-primary']")));
-        js.executeScript("window.scrollBy(0,170)");
-       File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-       FileUtils.copyFile(scrFile, new File("/home/damianpajonk/Dokumenty/ProjektSelenium/test.png"));
-
+        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(scrFile, new File("/home/damianpajonk/Dokumenty/ProjektSelenium/captureScreenshot.png"));
     }
-
-
-
-
 }
 
 
